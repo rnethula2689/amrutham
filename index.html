@@ -167,7 +167,7 @@
   // Skip-intro: the episode proper begins at 2:18 (138s). Choice is remembered.
   const SKIP_SECONDS = 138;
   // Episodes whose intro isn't the usual 2:18 — Skip intro jumps to these seconds instead.
-  const SKIP_OVERRIDE = {63:78,69:78,72:76,73:76,79:75,80:75,81:76,108:76,110:76,130:80,138:84,148:83,150:83,227:132};
+  const SKIP_OVERRIDE = {69:78,72:76,73:76,79:75,80:75,81:76,108:76,110:76,130:80,138:84,148:83,150:83,227:132};
   const skipIntro = document.getElementById("skipIntro");
   skipIntro.checked = localStorage.getItem("amrutham_skip_intro") === "1";
   skipIntro.addEventListener("change", ()=>{
