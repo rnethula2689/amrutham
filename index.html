@@ -84,23 +84,25 @@
 </head>
 <body>
 <header>
-  <h1>అమృతం · Amrutham</h1>
-  <p class="sub">The classic Telugu comedy · Official channel <a href="https://www.youtube.com/@AmruthamSerial/videos" target="_blank" rel="noopener">@AmruthamSerial</a> · 313 remastered episodes</p>
+  <h1 id="hTitle">అమృతం · Amrutham</h1>
+  <p class="sub" id="hSub">The classic Telugu comedy · Official channel <a href="https://www.youtube.com/@AmruthamSerial/videos" target="_blank" rel="noopener">@AmruthamSerial</a> · 313 remastered episodes</p>
 </header>
 
 <div class="tabs">
   <button class="tab active" data-tab="s1">Season 1</button>
   <button class="tab" data-tab="season2">Season 2</button>
+  <button class="tab" data-tab="lockdown">Lockdown Special</button>
   <button class="tab" data-tab="movie">Movie</button>
 </div>
 
 <div class="searchdock" id="searchDock"><input id="epSearch" type="text" placeholder="🔍 Search episode # or name" /></div>
+<div class="searchdock" id="s2dock" style="display:none"><input id="s2search" type="text" placeholder="🔍 Search Season 2" /></div>
 
 <main>
   <!-- SEASON 1 -->
   <section class="panel active" id="s1">
     <div class="player-wrap" id="playerWrap">
-      <div class="player"><div id="player"></div></div>
+      <div class="player"><div id="player"></div><video id="s1video" controls playsinline preload="metadata" style="display:none"></video></div>
       <div class="pcontrols">
         <a class="btn alt" href="https://www.youtube.com/@AmruthamSerial/videos" target="_blank" rel="noopener">▶ Open channel</a>
         <button class="btn alt" id="prevBtn">◀ Prev</button>
@@ -126,9 +128,30 @@
   <section class="panel" id="season2">
     <div class="player-wrap" id="s2wrap">
       <div class="player"><video id="s2player" controls playsinline preload="metadata"></video></div>
+      <div class="pcontrols">
+        <button class="btn alt" id="s2prev">◀ Prev</button>
+        <button class="btn alt" id="s2next">Next ▶</button>
+        <button class="btn" id="s2rand">🎲 Random</button>
+        <label class="skipintro"><input type="checkbox" id="s2skip"> Skip intro</label>
+        <label class="skipintro"><input type="checkbox" id="s2auto"> Autoplay next</label>
+      </div>
       <div class="nowplaying" id="s2now">▶ Pick a Season 2 episode below</div>
     </div>
     <div class="grid" id="s2grid"></div>
+  </section>
+
+  <!-- LOCKDOWN SPECIAL -->
+  <section class="panel" id="lockdown">
+    <div class="player-wrap" id="lkwrap">
+      <div class="player"><video id="lkplayer" controls playsinline preload="metadata"></video></div>
+      <div class="pcontrols">
+        <button class="btn alt" id="lkprev">◀ Prev</button>
+        <button class="btn alt" id="lknext">Next ▶</button>
+        <label class="skipintro"><input type="checkbox" id="lkauto"> Autoplay next</label>
+      </div>
+      <div class="nowplaying" id="lknow">▶ Pick a part below</div>
+    </div>
+    <div class="grid" id="lkgrid"></div>
   </section>
 
   <!-- MOVIE -->
@@ -152,24 +175,36 @@
   const EP = {"1":"Wcn8llWwN-M","2":"2xLD5DdOL_c","3":"3OIAJvUzgsw","4":"mcso2Kfr5xc","5":"IMtPuDHg20w","6":"9-eH6bpXzXc","7":"DWRk7y3U71U","8":"xYd0Nys1CAE","9":"YW3WB_SCXLI","10":"N0f9ujLFcjA","11":"WXATtHTfuAY","12":"EuJ0o0kNAuk","13":"7SMlqSmc2K0","14":"AoiG8tiw_pg","15":"Bqn_cnUDvk8","16":"jfMrFmapBj0","17":"WD4t3Wrkb9g","18":"wp5XROwbIUM","19":"4OOCNuQweGw","20":"RwhLOGoOOUM","21":"WtElvPl2Qbk","22":"jUuAMV9NTic","23":"yqg_40t3iCE","24":"ynJ4Ecv8hhA","25":"UdtiuYsqC-8","26":"yPu9rYP8Cog","27":"FRmqshYaUms","28":"IbFruIXcA9o","29":"N0vyIrRpQSg","30":"nAlPk9b2PYM","31":"u1KwTIqwVI8","32":"q5LvQHb-LVI","33":"GbDjsTdQpg4","34":"W0ZGsnsWiUA","35":"-UnyvrOGCN0","36":"CHBz5zn0zpc","37":"G0j84BTzWNY","38":"HXU6eMheOVA","39":"BJpo-ys6xH8","40":"bkxkYe3bfKI","41":"qF8RXdcmjBs","42":"ND3aS5QxUBA","43":"nvBtg7MnYuo","44":"C7ibQI2Pnws","45":"eD46TuWuzos","46":"MD6U9YL6Aog","47":"gRHEug4QjVo","48":"S9fzhvEiwK8","49":"lbMbBvKpEwI","50":"3P-4dCA3-5I","51":"NjJS2n4eEPM","52":"i03Vxil_pwA","53":"vrcjmr8yDxg","54":"se6XHb3oLew","55":"SNLBiztbt9E","56":"mj7GOdq-Av4","57":"k0VQz-IpdAs","58":"5JSpC0-Y5SU","59":"8-zPYEgJ0sc","60":"Urmd9J3hoAY","61":"x8aBVZHkWbI","62":"pQiVTADVw2o","63":"BNst2kUPf3Y","64":"beh7LtqYrkI","65":"dyQzOYc6eD4","66":"A40nWYwNL8A","67":"TzhPH2d00Hc","68":"ktb0NxtFyaY","69":"H50GDXNRHb8","70":"NLQoRzFB7Lk","71":"l1Z38d5PATY","72":"t6lSRxbPi6s","73":"Yg29720YsfA","74":"AnwKBXeLeN8","75":"Gus_YNsC-2I","76":"IXBeMkGrrU8","77":"kMcU9Ymzqu0","78":"YaSmeKlc05g","79":"7hhRottDnQ4","80":"nsVh2BEeZ0o","81":"HqOoyTJyDgc","82":"9WIuMkQ-4GU","83":"p2QqJCEE3uw","84":"B5S_RRgPbIg","85":"8qA75gBi0LM","86":"89HAMYwQ1sY","87":"-XmqqBVx1jo","88":"hPrnJ09MmNE","89":"gIY9ZIAhHNc","90":"jr90HHsuse0","91":"bX5PQkgdxdE","92":"vB0PorskKxw","93":"jaJWIyYvqHk","94":"uUEhMP2rxv0","95":"cES3Y4em1cs","96":"AI9vXF8jVjA","97":"gkbUgwgt2cg","98":"rAwHanp19CI","99":"mgpJf2QNq-A","100":"jIt6fyjBZgE","101":"7ff6m7L8CGQ","102":"99sWHMCR0S4","103":"wEtemeFu3C4","104":"qWzR0cAv75Y","105":"YDrUtpTeC08","106":"wdQQLGWGh2E","107":"YiOj2ASMYB4","108":"Q0b8hImb3ws","109":"gCwIsHA81tc","110":"gjtvLuKxT0c","111":"r5mlcvhoiXE","112":"wFdMxkELsXk","113":"9EF3pjYW4WE","114":"c2nbr-siRIs","115":"jX_itXpRFHc","116":"pd9UQjUIpCU","117":"ZrRebsZ23Kg","118":"O_HiJcjDd3k","119":"xZ4DzBl0jH4","120":"MgkMaGvpfL4","121":"ZCcGI4a0a00","122":"NKcwbKnc6Pw","123":"0Cf54dayqT8","124":"W2E-rA60cPI","125":"jOubVMfpEpM","126":"G1ptmmApkwg","127":"ad4oqwH9FWc","128":"xWC3Y-UhCgM","129":"5wIixHU0YK0","130":"uA0l64Ku7gg","131":"8TSInsRwqmA","132":"br-N7gC5kRc","133":"4OoTkOguYyE","134":"VxZLOMXbkSA","135":"Nle2B_HkLaI","136":"y5K3Itj607A","137":"UIkyGM3F5RU","138":"I_1CGWdrOvY","139":"kGMjM1dvQZo","140":"cAlvY12SCsc","141":"3yU28YxJfM0","142":"sSe21lJgdx8","143":"O2sv5Rsdm14","144":"R36VGZZMVBI","145":"FtjXnrAogSQ","146":"evLvM3w_yas","147":"vhhY6DZhQ3g","148":"ZF1Qb_nSKUI","149":"uUEhMP2rxv0","150":"h9rizxq-9pk","151":"QxG_8ucEr18","152":"EiRKKB1_4Hw","153":"Si5PK9bAtVc","154":"tCuOkV0dPJc","155":"CqU7kxPXkhA","156":"yroy5Li7-Zw","157":"UUY2tM-kmyE","158":"XJOQSWmh20k","159":"WuaVFRINTss","160":"pk5fMLzLL3A","161":"Jzw-p46JbVc","163":"JGFtlvkjkY0","164":"Gg81WMOHy88","165":"VpmDQ6dGUu0","166":"DSRcRYomIvQ","167":"2hAKzl4T_9Y","168":"doTNCHTIQxU","169":"z3oEsvtsdeI","170":"KcS7RdFGGHQ","171":"5jg9yE-6kGM","172":"c7xT0tGjO_c","173":"4-QHVwhuoTI","174":"ZojpnFKR8vQ","175":"9ww8VWgsaGM","176":"gHYxYyjsza8","177":"S8nXV6U6VAI","178":"czFbAzPTRQk","179":"-eL0NwuQFEY","180":"NR0OVrqnGZc","181":"2LkdGncPSpY","182":"i1bGeTpqu84","183":"PIU8NeIEEBc","184":"5Wn6MwQ-h28","185":"yHNsOlpkxNE","186":"1lA1-xT0fdg","187":"2l16yHBIQeU","188":"POBvmHQNZps","189":"92I0P6T6VUM","190":"MGhvsTjLNgc","191":"3rLdxyPeJnM","192":"qwmtAOVbUcM","193":"0pm6XqqFgJY","194":"qy7s8n5Ke7s","195":"OS3w-5xkTg4","196":"hlHhE8vFDg4","197":"4qXHqRqaGZ4","198":"2U_cWmGlKgE","199":"C82Hio2M5sc","200":"hPjZciBTwvQ","201":"oXCCeA3_zMo","202":"LeBKDpJgyb0","203":"6XT1c0QU4OE","204":"l9uffkXB15A","205":"5xp55kZcZ_s","206":"QaFkK5P4U0A","207":"Z7kYt1aNSUs","208":"OLHF13LfK1A","209":"3Ahy4FQigsU","210":"bWzA4DXOSg0","211":"pNUsRAlGUy4","212":"lvwqDRbPUSo","213":"FVd8-Az7sww","214":"AKdgx7BuE0o","215":"5w08DI968jk","216":"L3BC87JspsM","217":"rESejEY8CsY","218":"qAuctliOhvA","219":"ZL-I3vOKk9Q","220":"5wDfSDdXDm8","221":"mPgI4RAH6_I","222":"Y4505pyIzw4","223":"UL9JMbQwdoU","224":"FPv4s9bATzM","225":"T_NZl5gHJtk","226":"_X2vexht9z8","227":"B1Bq4m3b-z0","228":"bNHSDS_vpUc","229":"w_t2pGK0Mp0","230":"M1Q0eklu7CI","231":"WTN3_V7oaD8","232":"4k4BEeI-bd8","233":"DNF25567GTM","234":"xxPrcaqqIQQ","235":"QpAtFPMdhIM","236":"CwBBP8I6ESg","237":"-A_5F4kiTVg","238":"juVoy02KIqU","239":"PbScSa-aZvg","240":"IGcSGw_NJQ4","241":"qjmzm_y7qcg","242":"UEZizOeYeCE","243":"nmdXkzvnJg8","244":"PMt8DMVcTe4","245":"aHgY-gWjRXs","246":"btvfa-5Ztjk","247":"7wQbALa15Bg","248":"pOm4Jf2u650","249":"oCKYS8jNmZU","250":"eXHZOcL4Jps","251":"Txy6ZXWsXks","252":"icICE3wSclQ","253":"cK0H1KNcLks","254":"DfeuKQL8zPI","255":"ZzTYsbzHZXs","256":"ja9GB0gjtGU","257":"ogZXXzJcqwU","258":"e1dCgFBFrUo","259":"ET5vAGIsK_k","260":"YJCymBRRPIM","261":"OkInOhPziZc","262":"GB5Pz1iOayA","263":"ND2D-HQmivc","264":"HwRd-_82y94","265":"H_hB0M_zc4g","266":"j6pS7j884xI","267":"6rKnu2TM8Vk","268":"Zeei7L2SACU","269":"_C1ZINAqIKw","270":"PlVoXRpMQS8","271":"HPDSqRx5UH0","272":"2tMWxALB-vk","273":"KfYHrE8AVDA","276":"rN-wumnINT8","274":"WkV5lQ8FFkY","275":"jCPmv4dwjI8","277":"Omp2a9e_g2U","278":"sp9yXeaqC7c","279":"FjEt0leWfsw","280":"99KZ4lpJNfI","281":"pLeesj6K5TE","282":"cnRmVs8jBDM","283":"dFDXOKa4Ssg","284":"AMWQAT9kSjk","285":"vhMa7qWM-k8","286":"zLcUhU73s_s","287":"DI7Vx5jcxVw","288":"NWF7fYC-K5o","289":"0lKc3EuJaWw","290":"_1XdwIjPpPU","291":"vTZ8n5LLN6Q","292":"nLnuKY30Dog","293":"h82aWz2nMg8","294":"cgvkUJAZ7Js","295":"in75lHMwcQ4","296":"qWLxolOZ1ns","297":"8L9eZ7xjGAA","298":"CP9GNbA2jv4","299":"LNDV9B4t97k","300":"WYBVj1YkO0U","301":"QF_HzfdMXeU","302":"LkWwt5zwkEw","303":"EziNyJ8gJL0","304":"WzBV4zR9svE","305":"sLZqqLOItII","306":"vz06JugVh3I","307":"tXvJ-4tK6uI","308":"1HfNQCvUs00","309":"hJOobUwgWG8","310":"7Gxt7nm2b50","311":"KCkWbMHhENw","312":"xVx7n40gxXU","313":"cLVyq1QjDBA"};
 
   // Episode number -> episode name (parsed from the official video titles).
-  const NAME = {"1":"Go Gruha Pravesam","2":"Bow Saagaram","3":"Hello My Dear Wrong Number","4":"Indha Govindha","5":"Naruda Vanaruda","6":"Vaidhyo Narayano Hari","7":"Prakruti Vikruti","8":"Car Guddina Kapuram","9":"Muggu Gumma","10":"Vasthu Sisthu","11":"Intiki Lighter Intaayane","12":"Mudhuru Manasulu","13":"Kakaasthram","14":"TV TV Tivvittam","15":"Kalyana Veena","16":"Ugra Veena","17":"Sudi Yedamaithe","18":"Krutrima Vaidyaleela","19":"Rangu Bangam","20":"April 1 Vidudala (Aagipoyindhi)","21":"Lekhabhishekam","22":"Asatyagraham","23":"Vrudda Ramayanam","24":"Paropakari Papamanna","25":"Nidhaname Pramadhamu","26":"Peka Medalu","27":"Auto! Yeto!","28":"Neti Kukkale Repati Pourulu","29":"Goodachari 11111111116","30":"Samara Cut","31":"Mathi Poyina Chote Dhorukutundhi","32":"Aam Cet","33":"Oka Dhebbaku Rendu Gorrelu","34":"Amrutha Kalas","35":"Kadupe Noppi","36":"Aavesam Amrutham Amudham","37":"Shokokadidhi.. Shockokadidhi","38":"Paluke Bangaru Maaye Le","39":"Ammo Mummy","40":"Koi Raja Koi","41":"Server Sindhooram","42":"Action 500..Cut 50000","43":"Ammayiki Sannajaji Mamaku Sampangi","44":"Chavithi ChandaaMama","45":"Hotel'e Kadha Swarga Seema","46":"Dhina Dhina Asruvulu.. Noorella Asuvulu Part 1","47":"Dhina Dhina Asruvulu..Noorella Asuvulu Part 2","48":"Power Cut Cup Part 1","49":"Power Cut Cup Part 2","50":"Power Cut Cup Part 3","51":"Dhoopavali","52":"Amma Anakondamma","53":"Amrutha Abhayam","54":"Kalisi Unte Kaladhu Sukham / Dukham Part 1","55":"Kalisi Unte Kaladhu Sukham / Dukham","56":"Adrushtam Notlo Seni","57":"TV Lo Dukhanam","58":"Veera Boss","59":"Balle Titanic'laithe","60":"Ayomaya Sabha","61":"Jalabhoomi - Yedupovidatha","62":"Pis Vaasam","63":"Vareva Emi Face","64":"Hotel Kante Gudi Padilam","65":"Muhurtha Ballem","66":"Balentine","67":"Panchataram Part 1","68":"Panchataram Part 2","69":"Bowled Cup Part 1","70":"Crickettaya Namaha","71":"Ammo March 23","72":"Pachadaina Ugadi","73":"Yem Cet?","74":"Chethiki Panti Noppi","75":"Aakala Chakram","76":"Cell to Cell","77":"Rasam Pindina Lorry","78":"Pappu Chesina Appu Cardu","79":"Aithe.. Avvakapothe","80":"Aithe.. Avvakapothe Part 2","81":"Boat’nu Munchina Punker","82":"China Thrigi Dannam Pettu","83":"Rajanela","84":"Amrutha Ganga","85":"Sarve Jana Likhino Bhavanthu","86":"Chicken 65 03","87":"Meesam Purusha Lakshanam","88":"12va Pette","89":"Nee Noone Momu Naa Kanulaara","90":"Laali Jo Laali No","91":"Biddochina Vela Goddosthe","92":"Ardharatri Swatantram Vachindi","93":"Baruvu Prathishta","94":"Money Pressure Mini Ganesh","95":"Anthuleni Santhakam","96":"Chor Delivery","97":"Note Maata","98":"Chevula Puli","99":"Tholu Bommala Koluvu","100":"HUNDRED","101":"Ibbandhlu","102":"Deepavali Album","103":"Two Men One Brain","104":"Two Men One Brain Part 2","105":"Pedda Balala Dhinotsavam","106":"Athidhi Vaddobhava Part 1","107":"Athidhi Vaddobhava Part 2","108":"CAT Puli","109":"Pelli Roju","110":"Appaduguvadu Rogi Part 1","111":"Appaduguvadu Rogi Part 2","112":"Bad News","113":"Pandakki Mama Vachadu","114":"BRAKE","115":"Ranatantra Dinotsavam","116":"Idhi Katha Kadhu Part 1","117":"Idhi Katha Kadhu Part 2","118":"Premikula Dhinam","119":"Sivodhayam","120":"Kodidhatu Samvatsaram","121":"Vasantha Kaakila","122":"Total Part 1","123":"Total Part 2","124":"Samar Sang Cup","125":"Sri Rama Panchami","126":"Selavule Pariksha","127":"Kshana Kshanam","128":"Servers Sundaram Part 1","129":"Servers Sundaram Part 2","130":"Jalagni","131":"Pelli Kala Vachindhi","132":"Yachakarachakam","133":"Paatashala Via Cherasala","134":"Pan Parakashta Part 1","135":"Pan Parakashta P2","136":"Donga.CAM","137":"Pushpam Patram","138":"Baruvaina Pandhem","139":"Maikam Kammindhi","140":"Vegitroubles Part 1","141":"Vegitroubles Part 2","142":"Mundadugu Venakadugu","143":"Bomma Bagundhi","144":"Raktha Bandham","145":"Veera Raktha Bandham","146":"Maha Veera Raktha Bandham","147":"Pushkara Ghat'u","148":"Pracharam Hathya","149":"Money Pressure Mini Ganesh","150":"Mama Bhallukama","151":"Dongalunnaru Jagratta","152":"Sye Aa?","153":"Kshoura Sagaramadhanam","154":"Vijaya Dasami","155":"Atla Taddi","156":"Yerakkapoyi Vachanu","157":"Balala Dhinotsavam","158":"Boppi Kattindhi","159":"Puraskaram","160":"Shokokadidhi Shockokadiki Part 1","161":"Shokokadidhi Shockokadiki Part 2","163":"Cake Mass","164":"Nishabda Subhakankshalu","165":"Krishnarjuna Yuddam","166":"Okaridhi Okariki","167":"Anuchitha Power","168":"Gore Goddalaithe","169":"Mouna Sangramam","170":"Mouna Sangramam P2","171":"Onte, Kothi, O Inti Owner Part 1","172":"Onte, Kothi, O Inti Owner Part 2","173":"2 Varaalu 4 Raallu","174":"Prema Pavuram","175":"Prema Pavuram P2","176":"Prema Pavuram P3","177":"O Sthree Repu Raa","178":"Pellala Pandaga","179":"Alludiki Vaalujada","180":"Snehamera Naa Pranam","181":"Pillalu, Ethukellevaru Challanivare Part 1","182":"Pillalu, Ethukellevaru Challanivare Part 2","183":"Pillalu, Ethukellevaru Challanivare Part 3","184":"Chiru Jeetham Prema Geetham","185":"Agnathavasam","186":"Agnana Nivasam P2","187":"Aadamani Nannadagavalena","188":"Anukokunda Oka Function","189":"Fine Art","190":"A To Z Part 1","191":"A To Z Part 2","192":"Chaya Chitram Part 1","193":"Chaya Chitram Part 2","194":"Aashadamlo","195":"Suparichitudu Part 1","196":"Suparichitudu P2","197":"Rogam x Rogam","198":"Vratham","199":"Sammeta Potu","200":"Undrayi","201":"Anukokunda O Okatava Thedhi","202":"Municipal Mama","203":"Phone Kottu Sodhi Pettu","204":"Phone Kottu Sodhi Pettu P2","205":"Owner x Tenant","206":"Pandem Kodi","207":"Sahakara Vote Deepavaliki Out","208":"Pelli Pilupu","209":"Illu Illu Ekkadunnav?","210":"Owner Paraar","211":"Marapu Vachu Katha","212":"Marapu Vachu Katha P2","213":"Marapu Vachu Katha P3","214":"Christmas Kaanuka","215":"Happy Mooki Year Part 1","216":"Happy Mooki Year P2","217":"Pathi Padathi","218":"Wrong Call","219":"Jenda Kindha Kapiraju","220":"Jeetham * Jathakam = ?","221":"Kadhalan The Premikudu Part 1","222":"Kadhalan The Premikudu P2","223":"Nidrahara Deeksha","224":"VIP Kodi","225":"Dhachekoddi Dongala Paalu","226":"SHOW","227":"Sunaka Prema","228":"Theta Theta Telugula","229":"Telugu Raani Navami","230":"Telugu Lessa","231":"Telugu Noppi","232":"Ice Idly","233":"Bangaram Dukanam Part 1","234":"Bangaram Dukanam Part 2","235":"Bangaram Dukanam Part 3","236":"Raa Bandhuvulu","237":"Raa Bandhuvulu P2","238":"Raa Bandhuvulu P3","239":"Nanna Part 1","240":"Nanna Part 2","241":"Nanna Part 3","242":"Lucky Stone","243":"Ichata Mootram Poyaradhu","244":"Owner vs Major","245":"Butler Brahmachari Part 1","246":"Butler Brahmachari P2","247":"Doma Katu Kodiki Chetu","248":"Breaking News vs Radio Bajji Part 1","249":"Breaking News vs Radio Bajji Part 2","250":"Chavithi Chali Mantalu","251":"Oka Pizza Katha Part 1","252":"Oka Pizza Katha Part 2","253":"Oka Pizza Katha Part 3","254":"Gaali Prayanam Part 1","255":"Gaali Prayanam Part 2","256":"Remote Sampadhana","257":"Laden Masam Part 1","258":"Laden Masam Part 2","259":"Hindi Waiter","260":"5=50","261":"Gaana Kokila - Chevulu Kakila","262":"Nomu Pandindhi","263":"Sorry Exchange","264":"Cheviti Donga","265":"Clean Bowled Part 1","266":"Clean Bowled Part 2","267":"Samvatsaram Marindhi","268":"Pichiki Aakhari Anthasthu","269":"Sarukula Sandhadi","270":"Vajrotsavam","271":"Bheema Dheeksha","272":"Uchitha Viharam Part 1","273":"Uchitha Viharam Part 2","276":"Vraalu","274":"Divvi Divvi TV Tam","275":"Sulabha Sulochanaalu","277":"Ennikala Pareeksha Part 1","278":"Ennikala Pareeksha Part 2","279":"Ennikala Pareeksha Part 3","280":"April Fool","281":"Chakravaddi","282":"Beltu Bhagavatham","283":"Ashoka Vanam","284":"Pesalu Wardu","285":"International Sarvam","286":"Bhootha Vilas Part 1","287":"Bhootha Vilas Part 2","288":"Bhootha Vilas Part 3","289":"Sarvam Sundaram","290":"Andharu Serverle","291":"Operation Vilas","292":"Shooting Chustham","293":"Brathuke Oka Serial Part 1","294":"Brathuke Oka Serial Part 2","295":"Brathuke Oka Serial Part 3","296":"Dongallo Donga","297":"Kitchen TC Kamatham","298":"Apaharana","299":"Eenati Ee Bandham Yenatidho","300":"Pannu Bharam 300 Yellu","301":"Pesara Power","302":"Baruvaina Balaheenatha","303":"24 Gantala News","304":"Donga Yama","305":"Donga Yama Part 2","306":"Donga Yama Part 3","307":"Bamma Kalapam Part 1","308":"Bamma Kalapam Part 2","309":"Dhaagudu Moothalu","310":"Pracharam Midhya","311":"UN-హ్యాపీ డేస్ Part 1","312":"UN-హ్యాపీ డేస్ Part 2","313":"Tata Bye Bye Veedukolu"};
+  const NAME = {"1":"Go Gruha Pravesam","2":"Bow Saagaram","3":"Hello My Dear Wrong Number","4":"Indha Govindha","5":"Naruda Vanaruda","6":"Vaidhyo Narayano Hari","7":"Prakruti Vikruti","8":"Car Guddina Kapuram","9":"Muggu Gumma","10":"Vasthu Sisthu","11":"Intiki Lighter Intaayane","12":"Mudhuru Manasulu","13":"Kakaasthram","14":"TV TV Tivvittam","15":"Kalyana Veena","16":"Ugra Veena","17":"Sudi Yedamaithe","18":"Krutrima Vaidyaleela","19":"Rangu Bangam","20":"April 1 Vidudala (Aagipoyindhi)","21":"Lekhabhishekam","22":"Asatyagraham","23":"Vrudda Ramayanam","24":"Paropakari Papamanna","25":"Nidhaname Pramadhamu","26":"Peka Medalu","27":"Auto! Yeto!","28":"Neti Kukkale Repati Pourulu","29":"Goodachari 11111111116","30":"Samara Cut","31":"Mathi Poyina Chote Dhorukutundhi","32":"Aam Cet","33":"Oka Dhebbaku Rendu Gorrelu","34":"Amrutha Kalas","35":"Kadupe Noppi","36":"Aavesam Amrutham Amudham","37":"Shokokadidhi.. Shockokadidhi","38":"Paluke Bangaru Maaye Le","39":"Ammo Mummy","40":"Koi Raja Koi","41":"Server Sindhooram","42":"Action 500..Cut 50000","43":"Ammayiki Sannajaji Mamaku Sampangi","44":"Chavithi ChandaaMama","45":"Hotel'e Kadha Swarga Seema","46":"Dhina Dhina Asruvulu.. Noorella Asuvulu Part 1","47":"Dhina Dhina Asruvulu..Noorella Asuvulu Part 2","48":"Power Cut Cup Part 1","49":"Power Cut Cup Part 2","50":"Power Cut Cup Part 3","51":"Dhoopavali","52":"Amma Anakondamma","53":"Amrutha Abhayam","54":"Kalisi Unte Kaladhu Sukham / Dukham Part 1","55":"Kalisi Unte Kaladhu Sukham / Dukham","56":"Adrushtam Notlo Seni","57":"TV Lo Dukhanam","58":"Veera Boss","59":"Balle Titanic'laithe","60":"Ayomaya Sabha","61":"Jalabhoomi - Yedupovidatha","62":"Pis Vaasam","63":"Vareva Emi Face","64":"Hotel Kante Gudi Padilam","65":"Muhurtha Ballem","66":"Balentine","67":"Panchataram Part 1","68":"Panchataram Part 2","69":"Bowled Cup Part 1","70":"Crickettaya Namaha","71":"Ammo March 23","72":"Pachadaina Ugadi","73":"Yem Cet?","74":"Chethiki Panti Noppi","75":"Aakala Chakram","76":"Cell to Cell","77":"Rasam Pindina Lorry","78":"Pappu Chesina Appu Cardu","79":"Aithe.. Avvakapothe","80":"Aithe.. Avvakapothe Part 2","81":"Boat’nu Munchina Punker","82":"China Thrigi Dannam Pettu","83":"Rajanela","84":"Amrutha Ganga","85":"Sarve Jana Likhino Bhavanthu","86":"Chicken 65 03","87":"Meesam Purusha Lakshanam","88":"12va Pette","89":"Nee Noone Momu Naa Kanulaara","90":"Laali Jo Laali No","91":"Biddochina Vela Goddosthe","92":"Ardharatri Swatantram Vachindi","93":"Baruvu Prathishta","94":"Money Pressure Mini Ganesh","95":"Anthuleni Santhakam","96":"Chor Delivery","97":"Note Maata","98":"Chevula Puli","99":"Tholu Bommala Koluvu","100":"HUNDRED","101":"Ibbandhlu","102":"Deepavali Album","103":"Two Men One Brain","104":"Two Men One Brain Part 2","105":"Pedda Balala Dhinotsavam","106":"Athidhi Vaddobhava Part 1","107":"Athidhi Vaddobhava Part 2","108":"CAT Puli","109":"Pelli Roju","110":"Appaduguvadu Rogi Part 1","111":"Appaduguvadu Rogi Part 2","112":"Bad News","113":"Pandakki Mama Vachadu","114":"BRAKE","115":"Ranatantra Dinotsavam","116":"Idhi Katha Kadhu Part 1","117":"Idhi Katha Kadhu Part 2","118":"Premikula Dhinam","119":"Sivodhayam","120":"Kodidhatu Samvatsaram","121":"Vasantha Kaakila","122":"Total Part 1","123":"Total Part 2","124":"Samar Sang Cup","125":"Sri Rama Panchami","126":"Selavule Pariksha","127":"Kshana Kshanam","128":"Servers Sundaram Part 1","129":"Servers Sundaram Part 2","130":"Jalagni","131":"Pelli Kala Vachindhi","132":"Yachakarachakam","133":"Paatashala Via Cherasala","134":"Pan Parakashta Part 1","135":"Pan Parakashta P2","136":"Donga.CAM","137":"Pushpam Patram","138":"Baruvaina Pandhem","139":"Maikam Kammindhi","140":"Vegitroubles Part 1","141":"Vegitroubles Part 2","142":"Mundadugu Venakadugu","143":"Bomma Bagundhi","144":"Raktha Bandham","145":"Veera Raktha Bandham","146":"Maha Veera Raktha Bandham","147":"Pushkara Ghat'u","148":"Pracharam Hathya","149":"Money Pressure Mini Ganesh","150":"Mama Bhallukama","151":"Dongalunnaru Jagratta","152":"Sye Aa?","153":"Kshoura Sagaramadhanam","154":"Vijaya Dasami","155":"Atla Taddi","156":"Yerakkapoyi Vachanu","157":"Balala Dhinotsavam","158":"Boppi Kattindhi","159":"Puraskaram","160":"Shokokadidhi Shockokadiki Part 1","161":"Shokokadidhi Shockokadiki Part 2","162":"A Pradesh","163":"Cake Mass","164":"Nishabda Subhakankshalu","165":"Krishnarjuna Yuddam","166":"Okaridhi Okariki","167":"Anuchitha Power","168":"Gore Goddalaithe","169":"Mouna Sangramam","170":"Mouna Sangramam P2","171":"Onte, Kothi, O Inti Owner Part 1","172":"Onte, Kothi, O Inti Owner Part 2","173":"2 Varaalu 4 Raallu","174":"Prema Pavuram","175":"Prema Pavuram P2","176":"Prema Pavuram P3","177":"O Sthree Repu Raa","178":"Pellala Pandaga","179":"Alludiki Vaalujada","180":"Snehamera Naa Pranam","181":"Pillalu, Ethukellevaru Challanivare Part 1","182":"Pillalu, Ethukellevaru Challanivare Part 2","183":"Pillalu, Ethukellevaru Challanivare Part 3","184":"Chiru Jeetham Prema Geetham","185":"Agnathavasam","186":"Agnana Nivasam P2","187":"Aadamani Nannadagavalena","188":"Anukokunda Oka Function","189":"Fine Art","190":"A To Z Part 1","191":"A To Z Part 2","192":"Chaya Chitram Part 1","193":"Chaya Chitram Part 2","194":"Aashadamlo","195":"Suparichitudu Part 1","196":"Suparichitudu P2","197":"Rogam x Rogam","198":"Vratham","199":"Sammeta Potu","200":"Undrayi","201":"Anukokunda O Okatava Thedhi","202":"Municipal Mama","203":"Phone Kottu Sodhi Pettu","204":"Phone Kottu Sodhi Pettu P2","205":"Owner x Tenant","206":"Pandem Kodi","207":"Sahakara Vote Deepavaliki Out","208":"Pelli Pilupu","209":"Illu Illu Ekkadunnav?","210":"Owner Paraar","211":"Marapu Vachu Katha","212":"Marapu Vachu Katha P2","213":"Marapu Vachu Katha P3","214":"Christmas Kaanuka","215":"Happy Mooki Year Part 1","216":"Happy Mooki Year P2","217":"Pathi Padathi","218":"Wrong Call","219":"Jenda Kindha Kapiraju","220":"Jeetham * Jathakam = ?","221":"Kadhalan The Premikudu Part 1","222":"Kadhalan The Premikudu P2","223":"Nidrahara Deeksha","224":"VIP Kodi","225":"Dhachekoddi Dongala Paalu","226":"SHOW","227":"Sunaka Prema","228":"Theta Theta Telugula","229":"Telugu Raani Navami","230":"Telugu Lessa","231":"Telugu Noppi","232":"Ice Idly","233":"Bangaram Dukanam Part 1","234":"Bangaram Dukanam Part 2","235":"Bangaram Dukanam Part 3","236":"Raa Bandhuvulu","237":"Raa Bandhuvulu P2","238":"Raa Bandhuvulu P3","239":"Nanna Part 1","240":"Nanna Part 2","241":"Nanna Part 3","242":"Lucky Stone","243":"Ichata Mootram Poyaradhu","244":"Owner vs Major","245":"Butler Brahmachari Part 1","246":"Butler Brahmachari P2","247":"Doma Katu Kodiki Chetu","248":"Breaking News vs Radio Bajji Part 1","249":"Breaking News vs Radio Bajji Part 2","250":"Chavithi Chali Mantalu","251":"Oka Pizza Katha Part 1","252":"Oka Pizza Katha Part 2","253":"Oka Pizza Katha Part 3","254":"Gaali Prayanam Part 1","255":"Gaali Prayanam Part 2","256":"Remote Sampadhana","257":"Laden Masam Part 1","258":"Laden Masam Part 2","259":"Hindi Waiter","260":"5=50","261":"Gaana Kokila - Chevulu Kakila","262":"Nomu Pandindhi","263":"Sorry Exchange","264":"Cheviti Donga","265":"Clean Bowled Part 1","266":"Clean Bowled Part 2","267":"Samvatsaram Marindhi","268":"Pichiki Aakhari Anthasthu","269":"Sarukula Sandhadi","270":"Vajrotsavam","271":"Bheema Dheeksha","272":"Uchitha Viharam Part 1","273":"Uchitha Viharam Part 2","276":"Vraalu","274":"Divvi Divvi TV Tam","275":"Sulabha Sulochanaalu","277":"Ennikala Pareeksha Part 1","278":"Ennikala Pareeksha Part 2","279":"Ennikala Pareeksha Part 3","280":"April Fool","281":"Chakravaddi","282":"Beltu Bhagavatham","283":"Ashoka Vanam","284":"Pesalu Wardu","285":"International Sarvam","286":"Bhootha Vilas Part 1","287":"Bhootha Vilas Part 2","288":"Bhootha Vilas Part 3","289":"Sarvam Sundaram","290":"Andharu Serverle","291":"Operation Vilas","292":"Shooting Chustham","293":"Brathuke Oka Serial Part 1","294":"Brathuke Oka Serial Part 2","295":"Brathuke Oka Serial Part 3","296":"Dongallo Donga","297":"Kitchen TC Kamatham","298":"Apaharana","299":"Eenati Ee Bandham Yenatidho","300":"Pannu Bharam 300 Yellu","301":"Pesara Power","302":"Baruvaina Balaheenatha","303":"24 Gantala News","304":"Donga Yama","305":"Donga Yama Part 2","306":"Donga Yama Part 3","307":"Bamma Kalapam Part 1","308":"Bamma Kalapam Part 2","309":"Dhaagudu Moothalu","310":"Pracharam Midhya","311":"UN-హ్యాపీ డేస్ Part 1","312":"UN-హ్యాపీ డేస్ Part 2","313":"Tata Bye Bye Veedukolu"};
 
   function escHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 
-  // ---- Tabs ----
+  // Season 1 episodes we self-host as MP4 (found offline, hosted as a GitHub release asset).
+  const S1_MP4 = {162:"https://github.com/rnethula2689/amrutham/releases/download/Season2/s1e162.mp4"};
+
+  // ---- Tabs (each section gets its own header) ----
+  const HEADERS = {
+    s1:       { title:"Amrutham", sub:`Classic Telugu sitcom · Gemini TV (2001–2007) · 313 remastered episodes · <a href="https://www.youtube.com/@AmruthamSerial/videos" target="_blank" rel="noopener">@AmruthamSerial</a>` },
+    season2:  { title:"Amrutham Dhvitheeyam", sub:"2020 Telugu web series · ZEE5 · created by Gunnam Gangaraju" },
+    lockdown: { title:"Amrutham COVID-19 Lockdown Specials", sub:"Two-part special filmed during the 2020 lockdown" },
+    movie:    { title:"Amrutham Chandamamalo (2014)", sub:"Telugu sci-fi comedy · dir. Gunnam Gangaraju · Srinivas Avasarala" }
+  };
+  function setHeader(tab){ const h=HEADERS[tab]; if(h){ document.getElementById("hTitle").innerHTML=h.title; document.getElementById("hSub").innerHTML=h.sub; } }
   document.querySelectorAll(".tab").forEach(t=>{
     t.onclick = ()=>{
       document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
       document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
       t.classList.add("active");
-      document.getElementById(t.dataset.tab).classList.add("active");
       const tab = t.dataset.tab;
-      if(tab==="movie"){ pauseSeason1(); stopS2(); loadMovie(); }
-      else if(tab==="season2"){ pauseSeason1(); stopMovie(); }
-      else { stopMovie(); stopS2(); }
+      document.getElementById(tab).classList.add("active");
+      pauseSeason1(); stopMovie(); stopS2();   // pause everything; active tab's player starts on click
+      if(tab==="movie") loadMovie();
       document.getElementById("searchDock").style.display = (tab==="s1") ? "" : "none";
+      document.getElementById("s2dock").style.display = (tab==="season2") ? "" : "none";
+      setHeader(tab);
     };
   });
+  setHeader("s1");   // initial header matches the default active tab
 
   // ---- Player (YouTube IFrame API — needed to detect when an episode ends) ----
   const nowPlaying = document.getElementById("nowPlaying");
@@ -177,11 +212,13 @@
   let current = null, currentN = null, started = false;
   let ytPlayer = null, ytReady = false, pending = null;
   let wantStart = 0, seekPending = false;   // force start pos, overriding YouTube "resume"
+  const s1video = document.getElementById("s1video");   // for self-hosted MP4 episodes
+  let s1mp4Start = 0;
 
   // Skip-intro: the episode proper begins at 2:18 (138s). Choice is remembered.
   const SKIP_SECONDS = 138;
   // Episodes whose intro isn't the usual 2:18 — Skip intro jumps to these seconds instead.
-  const SKIP_OVERRIDE = {69:78,72:76,73:76,79:75,80:75,81:76,108:76,110:76,130:80,138:84,148:83,150:83,227:132};
+  const SKIP_OVERRIDE = {69:78,72:76,73:76,79:75,80:75,81:76,108:76,110:76,130:80,138:84,148:83,150:83,162:156,227:132};
   const skipIntro = document.getElementById("skipIntro");
   skipIntro.checked = localStorage.getItem("amrutham_skip_intro") === "1";
   skipIntro.addEventListener("change", ()=>{
@@ -231,15 +268,28 @@
   window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
   function play(n){
-    const id = EP[n];
-    if(!id){ window.open(chSearch(`Amrutham Episode ${n}`), "_blank", "noopener"); return; }
-    currentN = n; started = true;
-    wantStart = skipIntro.checked ? (SKIP_OVERRIDE[n] || SKIP_SECONDS) : 0;
-    if(ytReady && ytPlayer && ytPlayer.loadVideoById){
-      seekPending = true;
-      ytPlayer.loadVideoById({ videoId: id, startSeconds: wantStart });
+    const mp4 = S1_MP4[n];
+    if(mp4){   // self-hosted MP4 episode (e.g. 162) — use the <video>, hide the YT iframe
+      currentN = n; started = true;
+      if(ytReady && ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+      const ifr = document.getElementById("player"); if(ifr) ifr.style.display = "none";
+      s1video.style.display = "";
+      s1mp4Start = skipIntro.checked ? (SKIP_OVERRIDE[n] || SKIP_SECONDS) : 0;
+      s1video.src = mp4 + (s1mp4Start>0 ? `#t=${s1mp4Start}` : "");
+      s1video.play().catch(()=>{});
     } else {
-      pending = n;   // play as soon as the API is ready
+      const id = EP[n];
+      if(!id){ window.open(chSearch(`Amrutham Episode ${n}`), "_blank", "noopener"); return; }
+      s1video.pause(); s1video.style.display = "none";       // back to the YouTube player
+      const ifr = document.getElementById("player"); if(ifr) ifr.style.display = "";
+      currentN = n; started = true;
+      wantStart = skipIntro.checked ? (SKIP_OVERRIDE[n] || SKIP_SECONDS) : 0;
+      if(ytReady && ytPlayer && ytPlayer.loadVideoById){
+        seekPending = true;
+        ytPlayer.loadVideoById({ videoId: id, startSeconds: wantStart });
+      } else {
+        pending = n;   // play as soon as the API is ready
+      }
     }
     nowPlaying.textContent = `Now playing · Episode ${n}`;
     if(current) current.classList.remove("playing");
@@ -251,7 +301,7 @@
   // Prev/Next walk exact episode numbers, skipping any not in the remaster.
   function step(dir){
     let n = (currentN || 1) + dir;
-    while(n>=1 && n<=TOTAL && !EP[n]) n += dir;
+    while(n>=1 && n<=TOTAL && !EP[n] && !S1_MP4[n]) n += dir;
     if(n>=1 && n<=TOTAL) play(n);
   }
   document.getElementById("prevBtn").onclick = ()=>step(-1);
@@ -267,13 +317,16 @@
     play(n);
   }
   document.getElementById("randBtn").onclick = playRandom;
+  // self-hosted episode (162): enforce skip-intro start + autoplay-next
+  s1video.addEventListener("loadedmetadata", ()=>{ if(s1mp4Start>0){ try{ if(Math.abs(s1video.currentTime - s1mp4Start) > 2) s1video.currentTime = s1mp4Start; }catch(_){} } });
+  s1video.addEventListener("ended", ()=>{ if(autoNext.checked) step(1); });
 
   // ---- Build Season 1 grid ----
   const grid = document.getElementById("epGrid");
   const frag = document.createDocumentFragment();
   for(let n=1; n<=TOTAL; n++){
     const d = document.createElement("div");
-    const available = !!EP[n];
+    const available = !!EP[n] || !!S1_MP4[n];
     const nm = NAME[n] || "";
     d.className = "ep" + (available ? "" : " ext");
     d.dataset.n = n;
@@ -327,40 +380,106 @@
   const moviePlayer = document.getElementById("moviePlayer");
   function loadMovie(){ moviePlayer.src = `https://www.youtube.com/embed/${MOVIE_ID}?autoplay=1&rel=0`; }
   function stopMovie(){ moviePlayer.src = "about:blank"; }
-  function pauseSeason1(){ if(ytReady && ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo(); }
+  function pauseSeason1(){ if(ytReady && ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo(); try{ s1video.pause(); }catch(_){} }
   // (Episode 1 is cued automatically once the IFrame Player API is ready.)
 
-  // ---- Season 2: self-hosted MP4s (GitHub Release assets) ----
+  // ---- Season 2 & Lockdown Special: self-hosted MP4s (GitHub Release assets) ----
   const S2_BASE = "https://github.com/rnethula2689/amrutham/releases/download/Season2";
-  const S2 = {1:"The Beginning of Amrutha Vilas",2:"When Failure Becomes Your Friend",3:"The Angel in Disguise",4:"Lockdown Special Part I",5:"Lockdown Special Part II",6:"Mosquito Bite",7:"Kitty Party",8:"The Booksellers!",9:"Sick Sock-Mind Block",10:"Crazy Chef's Tasty Menu",11:"Final Destination",12:"Krishnashtami",13:"Door Delivery",14:"21 Varieties of Leaves",15:"The Colourful Dream",16:"Rummy and Fireworks",17:"Monstrous Stew 1",18:"Monstrous Stew 2",19:"Happy New Year",20:"Festival Rooster",21:"A Happy, Flying Birthday Cake",22:"Gravity of Fish Gravy",23:"Two Cooks Spoil the Broth",24:"Uma Devi's Wedding Festivities",25:"Amrutha Vilas, a reality show set",26:"Appaji in the house!"};
-  const S2_TOTAL = 26;
-  const s2player = document.getElementById("s2player");
-  const s2now = document.getElementById("s2now");
-  let s2current = null, s2n = null;
-  function stopS2(){ try{ s2player.pause(); }catch(_){} }
-  function playS2(n){
-    s2n = n;
-    const nn = String(n).padStart(2,"0");
-    s2player.src = `${S2_BASE}/s2e${nn}.mp4`;
-    s2player.play().catch(()=>{});
-    s2now.textContent = `Now playing · S2 E${n} — ${S2[n]||""}`;
-    if(s2current) s2current.classList.remove("playing");
-    const tile = s2grid.querySelector(`.ep[data-n="${n}"]`);
-    if(tile){ tile.classList.add("playing"); s2current = tile; }
-    document.getElementById("s2wrap").scrollIntoView({behavior:"smooth", block:"start"});
+  // {file} = uploaded asset name; the display number is the array position + 1.
+  const S2 = [
+    {file:"s2e01", title:"The Beginning of Amrutha Vilas"},
+    {file:"s2e02", title:"When Failure Becomes Your Friend"},
+    {file:"s2e03", title:"The Angel in Disguise"},
+    {file:"s2e06", title:"Mosquito Bite"},
+    {file:"s2e07", title:"Kitty Party"},
+    {file:"s2e08", title:"The Booksellers!"},
+    {file:"s2e09", title:"Sick Sock-Mind Block"},
+    {file:"s2e10", title:"Crazy Chef's Tasty Menu"},
+    {file:"s2e11", title:"Final Destination"},
+    {file:"s2e12", title:"Krishnashtami"},
+    {file:"s2e13", title:"Door Delivery"},
+    {file:"s2e14", title:"21 Varieties of Leaves"},
+    {file:"s2e15", title:"The Colourful Dream"},
+    {file:"s2e16", title:"Rummy and Fireworks"},
+    {file:"s2e17", title:"Monstrous Stew 1"},
+    {file:"s2e18", title:"Monstrous Stew 2"},
+    {file:"s2e19", title:"Happy New Year"},
+    {file:"s2e20", title:"Festival Rooster"},
+    {file:"s2e21", title:"A Happy, Flying Birthday Cake"},
+    {file:"s2e22", title:"Gravity of Fish Gravy"},
+    {file:"s2e23", title:"Two Cooks Spoil the Broth"},
+    {file:"s2e24", title:"Uma Devi's Wedding Festivities"},
+    {file:"s2e25", title:"Amrutha Vilas, a reality show set"},
+    {file:"s2e26", title:"Appaji in the house!"},
+  ];
+  const LOCK = [
+    {file:"s2e04", title:"Part 1"},
+    {file:"s2e05", title:"Part 2"},
+  ];
+
+  // Generic video-tab controller — Season 2 and Lockdown both use this.
+  function makeVideoTab(o){
+    const player = document.getElementById(o.playerId);
+    const grid   = document.getElementById(o.gridId);
+    const now    = document.getElementById(o.nowId);
+    const wrap   = document.getElementById(o.wrapId);
+    const auto   = o.autoId ? document.getElementById(o.autoId) : null;
+    const skip   = o.skipId ? document.getElementById(o.skipId) : null;
+    const skipOverride = o.skipOverride || {};   // {displayNumber: seconds}
+    let cur = null, idx = null, pendingStart = 0;
+    function startSec(i){ return (skip && skip.checked) ? (skipOverride[i+1] || o.skipDefault || 0) : 0; }
+    function play(i){
+      if(i<0 || i>=o.list.length) return;
+      idx = i; const ep = o.list[i];
+      pendingStart = startSec(i);
+      player.src = `${S2_BASE}/${ep.file}.mp4` + (pendingStart>0 ? `#t=${pendingStart}` : "");
+      player.play().catch(()=>{});
+      now.textContent = `Now playing · ${o.label} ${i+1} — ${ep.title}`;
+      if(cur) cur.classList.remove("playing");
+      const tile = grid.querySelector(`.ep[data-i="${i}"]`);
+      if(tile){ tile.classList.add("playing"); cur = tile; }
+      wrap.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    // enforce the skip-intro start once metadata is ready (overrides any browser default)
+    player.addEventListener("loadedmetadata", ()=>{ if(pendingStart>0){ try{ if(Math.abs(player.currentTime - pendingStart) > 2) player.currentTime = pendingStart; }catch(_){} } });
+    function stop(){ try{ player.pause(); }catch(_){} }
+    function filter(q){
+      q = (q||"").trim().toLowerCase();
+      grid.querySelectorAll(".ep").forEach(el=>{
+        const i = +el.dataset.i;
+        const match = q==="" || String(i+1).startsWith(q) || o.list[i].title.toLowerCase().includes(q);
+        el.classList.toggle("hidden", !match);
+      });
+    }
+    const frag = document.createDocumentFragment();
+    o.list.forEach((ep,i)=>{
+      const d = document.createElement("div");
+      d.className = "ep"; d.dataset.i = i; d.title = ep.title;
+      d.innerHTML = `<small>${o.tileLabel}</small><span class="num">${i+1}</span><span class="enm">${escHtml(ep.title)}</span>`;
+      d.onclick = ()=>play(i);
+      frag.appendChild(d);
+    });
+    grid.appendChild(frag);
+    if(o.prevId) document.getElementById(o.prevId).onclick = ()=> play(idx==null?0:idx-1);
+    if(o.nextId) document.getElementById(o.nextId).onclick = ()=> play(idx==null?0:idx+1);
+    if(o.randId) document.getElementById(o.randId).onclick = ()=>{ let r; do{ r=Math.floor(Math.random()*o.list.length); }while(o.list.length>1 && r===idx); play(r); };
+    if(auto){
+      auto.checked = localStorage.getItem(o.autoId)==="1";
+      auto.addEventListener("change", ()=> localStorage.setItem(o.autoId, auto.checked?"1":"0"));
+      player.addEventListener("ended", ()=>{ if(auto.checked && idx!=null && idx+1<o.list.length) play(idx+1); });
+    }
+    if(skip){
+      skip.checked = localStorage.getItem(o.skipId)==="1";
+      skip.addEventListener("change", ()=>{ localStorage.setItem(o.skipId, skip.checked?"1":"0"); if(idx!=null) play(idx); });
+    }
+    return { stop, play, filter };
   }
-  s2player.addEventListener("ended", ()=>{ if(s2n && s2n < S2_TOTAL) playS2(s2n+1); });   // autoplay next
-  const s2grid = document.getElementById("s2grid");
-  const s2frag = document.createDocumentFragment();
-  for(let n=1; n<=S2_TOTAL; n++){
-    const d = document.createElement("div");
-    d.className = "ep"; d.dataset.n = n;
-    d.title = `S2 E${n} — ${S2[n]}`;
-    d.innerHTML = `<small>Episode</small><span class="num">${n}</span><span class="enm">${escHtml(S2[n]||"")}</span>`;
-    d.onclick = ()=>playS2(n);
-    s2frag.appendChild(d);
-  }
-  s2grid.appendChild(s2frag);
+
+  // S2 skip-intro default 2:48 (168s); add per-episode overrides as {displayNumber: seconds}
+  const s2tab = makeVideoTab({ list:S2,   playerId:"s2player", gridId:"s2grid", nowId:"s2now", wrapId:"s2wrap", prevId:"s2prev", nextId:"s2next", randId:"s2rand", autoId:"s2auto", skipId:"s2skip", skipDefault:168, skipOverride:{}, label:"Episode", tileLabel:"Episode" });
+  const lktab = makeVideoTab({ list:LOCK, playerId:"lkplayer", gridId:"lkgrid", nowId:"lknow", wrapId:"lkwrap", prevId:"lkprev", nextId:"lknext", autoId:"lkauto", label:"Lockdown", tileLabel:"Part" });
+  function stopS2(){ s2tab.stop(); lktab.stop(); }
+  document.getElementById("s2search").addEventListener("input", e=> s2tab.filter(e.target.value));
 </script>
 </body>
 </html>
