@@ -275,7 +275,7 @@
       const ifr = document.getElementById("player"); if(ifr) ifr.style.display = "none";
       s1video.style.display = "";
       s1mp4Start = skipIntro.checked ? (SKIP_OVERRIDE[n] || SKIP_SECONDS) : 0;
-      s1video.src = mp4 + (s1mp4Start>0 ? `#t=${s1mp4Start}` : "");
+      s1video.src = mp4 + `?cb=${Date.now()}` + (s1mp4Start>0 ? `#t=${s1mp4Start}` : "");
       s1video.play().catch(()=>{});
     } else {
       const id = EP[n];
@@ -432,7 +432,7 @@
       if(i<0 || i>=o.list.length) return;
       idx = i; const ep = o.list[i];
       pendingStart = startSec(i);
-      player.src = `${S2_BASE}/${ep.file}.mp4` + (pendingStart>0 ? `#t=${pendingStart}` : "");
+      player.src = `${S2_BASE}/${ep.file}.mp4?cb=${Date.now()}` + (pendingStart>0 ? `#t=${pendingStart}` : "");
       player.play().catch(()=>{});
       now.textContent = `Now playing · ${o.label} ${i+1} — ${ep.title}`;
       if(cur) cur.classList.remove("playing");
