@@ -180,7 +180,7 @@
   function escHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 
   // Season 1 episodes we self-host as MP4 (found offline, hosted as a GitHub release asset).
-  const S1_MP4 = {162:"https://github.com/rnethula2689/amrutham/releases/download/Season2/s1e162.mp4"};
+  const S1_MP4 = {162:"https://amrutham.rnethula-ms.workers.dev/Season2/s1e162.mp4"};
 
   // ---- Tabs (each section gets its own header) ----
   const HEADERS = {
@@ -384,7 +384,7 @@
   // (Episode 1 is cued automatically once the IFrame Player API is ready.)
 
   // ---- Season 2 & Lockdown Special: self-hosted MP4s (GitHub Release assets) ----
-  const S2_BASE = "https://github.com/rnethula2689/amrutham/releases/download/Season2";
+  const S2_BASE = "https://amrutham.rnethula-ms.workers.dev/Season2";   // Cloudflare Worker proxy → serves GitHub release assets as video/mp4 (iOS-friendly)
   // {file} = uploaded asset name; the display number is the array position + 1.
   const S2 = [
     {file:"s2e01", title:"The Beginning of Amrutha Vilas"},
